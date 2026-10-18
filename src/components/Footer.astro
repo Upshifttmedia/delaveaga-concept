@@ -1,0 +1,47 @@
+---
+import { SITE } from '../config';
+const tel = (p: string) => `tel:+1${p.replace(/\D/g, '')}`;
+---
+<footer>
+  <div class="wrap">
+    <div class="top">
+      <div><img class="flogo" src="/images/logo-white.png" alt="DeLaveaga, Santa Cruz, CA" width="680" height="451" /></div>
+      <div>
+        <h4>Visit</h4>
+        <p>{SITE.address[0]}<br />{SITE.address[1]}</p>
+        <p style="margin-top:12px"><a href={SITE.mapsUrl} target="_blank" rel="noopener">Directions</a></p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li>Golf shop <a href={tel(SITE.phone.shop)}>{SITE.phone.shop}</a></li>
+          <li>The Grille <a href={tel(SITE.phone.grille)}>{SITE.phone.grille}</a></li>
+          <li><a href="https://delaveagagolf.com/employment/" target="_blank" rel="noopener">Employment</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>News &amp; offers</h4>
+        <form class="signup" id="signup">
+          <label for="email" class="visually-hidden">Email</label>
+          <input id="email" type="email" placeholder="Email address" required />
+          <button class="btn btn-brass" type="submit">Join</button>
+        </form>
+        <div class="signup-msg" id="signup-msg" aria-live="polite"></div>
+      </div>
+    </div>
+    <div class="legal">
+      {SITE.pitchMode
+        ? <span>Concept design proposal. Not affiliated with or endorsed by DeLaveaga Golf Course or the City of Santa Cruz.</span>
+        : <span>© {new Date().getFullYear()} DeLaveaga Golf Course · City of Santa Cruz</span>}
+      <span>Rates as published, {SITE.ratesAsOf}.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('signup')!.addEventListener('submit', (e) => {
+    e.preventDefault();
+    document.getElementById('signup-msg')!.textContent = 'Thanks for joining. (Sign-up isn\'t connected yet.)';
+    (e.target as HTMLFormElement).reset();
+  });
+</script>

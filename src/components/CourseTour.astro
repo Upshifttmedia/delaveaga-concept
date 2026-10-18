@@ -1,0 +1,74 @@
+---
+import { HOLES, TEES } from '../data/course';
+const first = HOLES[0];
+---
+<section id="course" class="tour">
+  <div class="wrap">
+    <div class="tour-head">
+      <div>
+        <span class="kicker">Course tour</span>
+        <h2 class="h2">Know every hole before you tee off.</h2>
+        <p class="lead">Watch each hole fly by, or pick one to see the yardage and a local's read on how to play it.</p>
+      </div>
+      <div class="tees" role="group" aria-label="Tee box">
+        {Object.entries(TEES).map(([k, t], i) => (
+          <button type="button" data-tee={k} aria-pressed={i === 0 ? 'true' : 'false'}>
+            <span class="dot" style={`background:${t.color}`}></span>{t.name}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="flywrap">
+        <div class="fly" id="fly" aria-label="Hole flyover preview">
+          <div class="media" id="media"></div>
+          <div class="shade"></div>
+          <div class="bars" id="bars" aria-hidden="true">{HOLES.map(() => <i><b></b></i>)}</div>
+          <div class="top"><img src="/images/logo.png" alt="" /><span>DeLaveaga</span><span class="chip">FLYOVER</span></div>
+          <div class="cap">
+            <div class="hn" id="f-num">1</div>
+            <div class="hm" id="f-meta"></div>
+            <div class="line" id="f-line"></div>
+          </div>
+          <button class="tap l" id="tapL" aria-label="Previous hole"></button>
+          <button class="tap r" id="tapR" aria-label="Next hole"></button>
+          <button class="pp" id="pp" aria-label="Pause flyover"><svg width="14" height="14" viewBox="0 0 14 14" id="ppicon"></svg></button>
+        </div>
+        <p class="fly-note">Preview using the course's existing hole imagery. Tap the sides to skip holes.</p>
+      </div>
+
+      <div class="hole-info" aria-live="polite">
+        <div class="hole-title"><span class="num" id="h-num">1</span><span class="lbl" id="h-lbl">Hole one</span></div>
+        <div class="meta">
+          <div><span>Par</span><strong id="h-par">{first.par}</strong></div>
+          <div><span>Yards</span><strong id="h-yds">{first.yards.b}</strong></div>
+          <div><span>Men's hcp</span><strong id="h-hcp">{first.hcpMen}</strong></div>
+          <div><span>Women's hcp</span><strong id="h-hcpw">{first.hcpWomen}</strong></div>
+        </div>
+        <span class="htp-label">HOW TO PLAY IT</span>
+        <p id="h-note">{first.howToPlay}</p>
+        <div class="badge" id="h-badge" hidden></div>
+        <a class="ep-link" href="#series">
+          <span class="pl"><svg width="12" height="13" viewBox="0 0 12 13"><path d="M1 1l10 5.5L1 12z" fill="#fff"/></svg></span>
+          <span><b id="ep-title">Episode 1: {first.episode}</b><span>How to Play DeLaveaga · video coming soon</span></span>
+        </a>
+        <div class="hole-nav">
+          <button type="button" id="prev">Previous hole</button>
+          <button type="button" id="next">Next hole</button>
+        </div>
+      </div>
+    </div>
+
+    <details class="cardwrap">
+      <summary>View full scorecard</summary>
+      <div class="scorecard"><table id="card"></table></div>
+      <p class="teeinfo" id="teeinfo"></p>
+    </details>
+  </div>
+</section>
+
+<script>
+  import { initCourseTour } from '../scripts/course';
+  initCourseTour();
+</script>

@@ -1,0 +1,19 @@
+---
+import { HOLES } from '../data/course';
+const blue = HOLES.reduce((s, h) => s + h.yards.b, 0).toLocaleString();
+---
+<section class="welcome">
+  <div class="wrap grid">
+    <div>
+      <span class="kicker">Welcome to DeLaveaga</span>
+      <h2 class="h2">A city course with a reputation that travels.</h2>
+      <p class="lead">Designed by Bert Stamps and owned by the City of Santa Cruz, DeLaveaga is known for narrow fairways, forced carries over wooded ravines, and views that reach Monterey Bay. It's short on the card and serious about it, and it's where the whole county comes to play.</p>
+    </div>
+    <div class="facts">
+      <div><b>1970</b><span>Opened for play</span></div>
+      <div><b>Par 70</b><span>{blue} yards from the blues</span></div>
+      <div><b>#10</b><span>Among NorCal's toughest holes</span></div>
+      <div><b>40 bays</b><span>Two-tier lighted range</span></div>
+    </div>
+  </div>
+</section>

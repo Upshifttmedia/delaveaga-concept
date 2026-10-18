@@ -1,0 +1,19 @@
+---
+import { SITE } from '../config';
+---
+<section id="dining" class="dining">
+  <div class="grid">
+    <div class="img" role="img" aria-label="The dining room at the Grille, with its brick fireplace and views over the course"></div>
+    <div class="copy">
+      <img src="/images/grille-logo-white.png" alt="The Grille at DeLaveaga" width="670" height="330" />
+      <p>Upstairs above the golf shop, the Grille looks out across the course to Monterey Bay. The kitchen serves seasonal California fare sourced from local farms, with a full bar, a fireplace, and outdoor deck seating.</p>
+      <p>Lunch after your round, dinner with a view, or every NFL Sunday on the big screens.</p>
+      <dl>
+        <dt>Reservations</dt><dd><a href={`tel:+1${SITE.phone.grille.replace(/\D/g, '')}`}>{SITE.phone.grille}</a></dd>
+        <dt>Also on site</dt><dd>RangeSide Bar · Snack bar · Beverage carts</dd>
+        <dt>Private events</dt><dd>Weddings, celebrations and group dinners</dd>
+      </dl>
+      <div><a class="btn btn-brass" href="https://delaveagagolf.com/dining/" target="_blank" rel="noopener">View the menu</a></div>
+    </div>
+  </div>
+</section>

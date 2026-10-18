@@ -1,0 +1,85 @@
+---
+import { SITE } from '../config';
+import { CART_PER_RIDER, DISCOUNT_CARDS } from '../data/rates';
+const steps = [
+  ['Visit the driving range', 'Forty covered, lighted bays across two tiers, open until 8pm nightly. Buy a bucket and take your time.'],
+  ['Book a lesson', 'Learn from PGA professional Parker Hammond or former LPGA Tour player Dodie Mazzuca, both teaching here year-round.'],
+  ['Play nine at twilight', 'Late-day tee times are quieter, unhurried, and the most affordable golf on the course.'],
+];
+const seg = (name: string, opts: [string, string][], checked = 0) => ({ name, opts, checked });
+const groups = [
+  { legend: 'Day', ...seg('day', [['wk', 'Monday – Friday'], ['we', 'Weekend & holiday']]) },
+  { legend: 'Round', ...seg('len', [['18', '18 holes'], ['9', '9 holes'], ['tw', 'Twilight'], ['st', 'Super twilight']]) },
+  { legend: 'Golfer', ...seg('who', [['reg', 'Public'], ['card', 'Discount card'], ['jr', 'Junior']]) },
+];
+---
+<section id="first-round" class="rates first-round">
+  <div class="wrap grid">
+    <div>
+      <span class="kicker">New to golf? Start here</span>
+      <h2 class="h2">Your first round, and what it costs.</h2>
+      <ol class="path compact">
+        {steps.map(([t, p]) => <li><div><h3>{t}</h3><p>{p}</p></div></li>)}
+      </ol>
+
+      <h3 class="finder-title">Find your rate</h3>
+      <form class="picker" id="picker" onsubmit="return false">
+        {groups.map((g) => (
+          <fieldset>
+            <legend>{g.legend}</legend>
+            <div class="seg">
+              {g.opts.map(([v, label], i) => (
+                <label><input type="radio" name={g.name} value={v} checked={i === g.checked} /><span>{label}</span></label>
+              ))}
+            </div>
+          </fieldset>
+        ))}
+      </form>
+      <p class="fine">Discount cards: {DISCOUNT_CARDS.map((c) => `${c.name} ${c.price}`).join(', ')}. Annual unlimited passes are also available through the golf shop. Rates as of {SITE.ratesAsOf}.</p>
+    </div>
+
+    <div class="result" aria-live="polite">
+      <div class="label" id="r-label"></div>
+      <div class="price" id="r-price"></div>
+      <p class="note" id="r-note"></p>
+      <div class="row"><span>Golf cart</span><span>{CART_PER_RIDER} per rider</span></div>
+      <div class="row"><span>Twilight begins</span><span id="r-tw"></span></div>
+      <div class="row"><span>Super twilight begins</span><span id="r-st"></span></div>
+      <div class="tip" id="r-tip"></div>
+      <a class="btn btn-primary" href={SITE.bookingUrl} target="_blank" rel="noopener">Book at this rate</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { RATES } from '../data/rates';
+  import { laNow, fmt, twilightTimes } from '../scripts/time';
+
+  const L: Record<string, string> = { wk: 'Weekday', we: 'Weekend & holiday', '18': '18 holes', '9': '9 holes', tw: 'Twilight', st: 'Super twilight', reg: 'Public', card: 'Discount card', jr: 'Junior' };
+  const NOTES: Record<string, string> = {
+    reg: 'Public rates vary with demand. Booking in advance online typically secures the lower rate.',
+    card: 'For holders of a 2026 Santa Cruz County, non-resident, or city senior discount card.',
+    jr: 'For golfers 18 and under. NCGA Youth on Course members play for $5 from 1:00pm daily.',
+  };
+  const form = document.getElementById('picker') as HTMLFormElement;
+  const n = laNow();
+  const tt = twilightTimes(n.dst);
+  document.getElementById('r-tw')!.textContent = fmt(tt.twilight);
+  document.getElementById('r-st')!.textContent = fmt(tt.superTwilight);
+  if (n.wd === 'Sat' || n.wd === 'Sun') (form.querySelector('input[name=day][value=we]') as HTMLInputElement).checked = true;
+
+  function rate() {
+    const f = new FormData(form);
+    const d = f.get('day') as 'wk' | 'we', l = f.get('len') as '18' | '9' | 'tw' | 'st', w = f.get('who') as 'reg' | 'card' | 'jr';
+    document.getElementById('r-label')!.textContent = `${L[d]} · ${L[l]} · ${L[w]}`;
+    document.getElementById('r-price')!.textContent = RATES[d][l][w];
+    document.getElementById('r-note')!.textContent = NOTES[w];
+    document.getElementById('r-tip')!.textContent =
+      w === 'reg' && l === '18' ? 'Playing regularly? A $125 county discount card can pay for itself within a handful of rounds, and moves twilight rates up to noon.'
+      : w === 'card' ? 'Cardholders receive twilight rates beginning at 12:00 noon, every day.'
+      : w === 'jr' ? 'Junior twilight and super twilight rates are $17, seven days a week.'
+      : 'Late-day rounds are the best value on the course, with daylight to finish nine through the summer.';
+  }
+  form.addEventListener('change', rate);
+  rate();
+</script>

@@ -1,0 +1,33 @@
+---
+import '../styles/global.css';
+import { SITE } from '../config';
+
+interface Props { title?: string; description?: string }
+const {
+  title = `${SITE.name} · Santa Cruz`,
+  description = 'Eighteen holes along the wooded ridges of DeLaveaga Park in Santa Cruz, California. Open to everyone since 1970.',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{SITE.pitchMode ? `${title} (Concept)` : title}</title>
+    <meta name="description" content={description} />
+    {SITE.noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" type="image/png" href="/images/logo.png" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/images/hero.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

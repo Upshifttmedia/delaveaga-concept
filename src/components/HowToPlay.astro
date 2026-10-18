@@ -1,0 +1,86 @@
+---
+import { HOLES } from '../data/course';
+import { SITE } from '../config';
+import { holeMedia } from '../scripts/holeArt';
+/** The episode that's filmed (or filming) first. */
+const FEATURED = 10;
+const includes = [
+  ['Drone flyover, tee to green', 'See the whole hole before you step on the tee.', '<rect x="3" y="2" width="20" height="22" rx="3"/><path d="M11 9.5l6 3.5-6 3.5z" fill="#C29D63"/>'],
+  ['The smart line off the tee', 'Which club, where to aim, and what to stay away from.', '<path d="M13 23V4"/><path d="M13 4l8 3.5-8 3.5"/><circle cx="13" cy="23" r="1.6" fill="#C29D63"/>'],
+  ['Approach and where to miss', 'The safe side of every green, and the miss that costs you.', '<circle cx="13" cy="13" r="10"/><circle cx="13" cy="13" r="5"/><circle cx="13" cy="13" r="1" fill="#C29D63"/>'],
+  ['Reading the green', 'Slopes, tiers and the putt everybody gets wrong.', '<path d="M3 18c4-6 8-6 10-3s6 3 10-3"/><path d="M3 22h20"/>'],
+];
+---
+<section id="series" class="series">
+  <div class="wrap">
+    <div class="series-head">
+      <div>
+        <span class="kicker">An original video series</span>
+        <h2>How to Play DeLaveaga.</h2>
+        <p class="lead">Eighteen short vertical episodes, one for every hole. Local golfers fly each hole tee to green, then walk through exactly how to play it, so first-timers arrive ready and regulars finally figure out #10.</p>
+      </div>
+      <ul class="includes">
+        {includes.map(([title, text, icon]) => (
+          <li>
+            <svg viewBox="0 0 26 26" fill="none" stroke="#C29D63" stroke-width="1.6" set:html={icon}></svg>
+            <div><b>{title}</b><span>{text}</span></div>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {SITE.pitchMode && (
+      <aside class="pitch" aria-label="A note for the DeLaveaga team">
+        <span class="pitch-label">A note for the DeLaveaga team</span>
+        <p><strong>This series is our proposal, and we'd produce it for you.</strong> We're local golfers who play DeLaveaga every week. We'll film, edit and deliver all 18 episodes: drone flyovers, on-course breakdowns and captions, formatted for this site, Instagram, TikTok, YouTube and the screens in the golf shop. Everything shown here is a preview of that content.</p>
+        <p class="pitch-sign">{SITE.crew.name} · <a href={`mailto:${SITE.crew.contact}`}>{SITE.crew.contact}</a></p>
+      </aside>
+    )}
+
+    <div class="reel-top">
+      <span class="count">18 episodes · tap one to preview the hole</span>
+      <div class="arrows">
+        <button type="button" id="rl" aria-label="Scroll episodes left">&larr;</button>
+        <button type="button" id="rr" aria-label="Scroll episodes right">&rarr;</button>
+      </div>
+    </div>
+    <div class="reel" id="reel">
+      {HOLES.map((h) => (
+        <button type="button" class="ep" data-i={h.n - 1} aria-label={`Episode ${h.n}, hole ${h.n}: ${h.episode}`}>
+          <div class="bg" set:html={holeMedia(h, true)}></div>
+          <div class="eptop">
+            <span>EP {String(h.n).padStart(2, '0')}</span>
+            <span class={`soon ${h.n === FEATURED ? 'first' : ''}`}>{h.video ? 'Watch now' : h.n === FEATURED ? 'Filming first' : 'Coming soon'}</span>
+          </div>
+          <div class="epb">
+            <div class="n">{h.n}</div>
+            <div class="t">{h.episode}</div>
+            <div class="m">Par {h.par} · {h.yards.b} yds</div>
+          </div>
+        </button>
+      ))}
+    </div>
+
+    <div class="channels">
+      <span><b>Made for</b> this website</span><span>Instagram Reels</span><span>TikTok</span><span>YouTube Shorts</span><span>Golf shop screens</span>
+      <span class="credit">Produced with local golfers, in partnership with DeLaveaga</span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const reel = document.getElementById('reel')!;
+  reel.querySelectorAll<HTMLButtonElement>('.ep').forEach((b) => {
+    b.onclick = () => {
+      window.dispatchEvent(new CustomEvent('hole:show', { detail: Number(b.dataset.i) }));
+      document.getElementById('fly')!.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+  });
+  window.addEventListener('hole:changed', (e) => {
+    const i = (e as CustomEvent<number>).detail;
+    reel.querySelectorAll('.ep').forEach((el, j) => el.classList.toggle('on', j === i));
+  });
+  const step = () => (reel.querySelector('.ep') as HTMLElement).offsetWidth * 3 + 42;
+  document.getElementById('rl')!.onclick = () => reel.scrollBy({ left: -step(), behavior: 'smooth' });
+  document.getElementById('rr')!.onclick = () => reel.scrollBy({ left: step(), behavior: 'smooth' });
+</script>

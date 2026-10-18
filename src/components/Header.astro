@@ -1,0 +1,53 @@
+---
+import { SITE } from '../config';
+const links = [
+  ['#course', 'The course'],
+  ['#series', 'How to play'],
+  ['#first-round', 'Rates & first round'],
+  ['#dining', 'The Grille'],
+  ['#community', 'Clubs & events'],
+];
+---
+<div class="util">
+  <div class="wrap">
+    <div class="left">
+      <span id="u-hours">Open today 7:00am – dusk</span>
+      <span class="tw-pill" id="u-tw">Twilight rates at 3:00pm</span>
+      <span>Range open till 8:00pm</span>
+    </div>
+    <div class="right">
+      {SITE.pitchMode
+        ? <span class="concept-tag">Concept redesign · not the official site</span>
+        : <a href={`tel:+1${SITE.phone.shop.replace(/\D/g, '')}`}>Golf shop {SITE.phone.shop}</a>}
+    </div>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="DeLaveaga Golf Course home">
+      <img src="/images/logo.png" alt="DeLaveaga, Santa Cruz, CA" width="680" height="451" />
+    </a>
+    <nav class="menu" aria-label="Main">
+      {links.map(([href, label]) => <a href={href}>{label}</a>)}
+    </nav>
+    <a class="btn btn-primary" href={SITE.bookingUrl} target="_blank" rel="noopener">Book a tee time</a>
+  </div>
+</header>
+
+<script>
+  import { laNow, fmt, twilightTimes } from '../scripts/time';
+  function tick() {
+    const n = laNow();
+    const now = n.h * 60 + n.m;
+    const { twilight, superTwilight } = twilightTimes(n.dst);
+    const weekend = n.wd === 'Sat' || n.wd === 'Sun';
+    document.getElementById('u-hours')!.textContent = `Open today ${weekend ? '6:30am' : '7:00am'} – dusk`;
+    document.getElementById('u-tw')!.textContent =
+      now < twilight ? `Twilight rates at ${fmt(twilight)}`
+      : now < superTwilight ? 'Twilight rates in effect now'
+      : 'Super twilight rates in effect now';
+  }
+  tick();
+  setInterval(tick, 60_000);
+</script>

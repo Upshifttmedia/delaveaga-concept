@@ -1,0 +1,40 @@
+---
+import { SITE } from '../config';
+---
+<div class="hero">
+  <div class="wrap">
+    <span class="est">Est. 1970 · Santa Cruz, California</span>
+    <h1>{SITE.tagline}</h1>
+    <p>Eighteen holes along the wooded ridges of DeLaveaga Park, minutes from downtown. Open to everyone, every day, dawn to dusk.</p>
+    <div class="ctas">
+      <a class="btn btn-brass" href={SITE.bookingUrl} target="_blank" rel="noopener">Book a tee time</a>
+      <a class="btn btn-line" href="#course">Tour the course</a>
+    </div>
+  </div>
+</div>
+
+<div class="bookbar">
+  <div class="wrap">
+    <form action={SITE.bookingUrl} target="_blank">
+      <div class="field"><label for="b-date">Date</label><input id="b-date" type="date" /></div>
+      <div class="field">
+        <label for="b-players">Players</label>
+        <select id="b-players"><option>1 player</option><option selected>2 players</option><option>3 players</option><option>4 players</option></select>
+      </div>
+      <div class="field">
+        <label for="b-time">Time of day</label>
+        <select id="b-time"><option>Morning</option><option>Midday</option><option>Twilight</option></select>
+      </div>
+      <button class="btn btn-primary" type="submit">Find tee times</button>
+    </form>
+    <div class="hint">Prepaid online reservations are recommended. Booking opens on the course's tee sheet.</div>
+  </div>
+</div>
+
+<script>
+  import { laNow } from '../scripts/time';
+  const d = document.getElementById('b-date') as HTMLInputElement;
+  const n = laNow();
+  d.value = n.iso;
+  d.min = n.iso;
+</script>

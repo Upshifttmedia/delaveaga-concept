@@ -1,0 +1,22 @@
+---
+const timeline = [
+  ['1890s', "De Laveaga's estate is left to the public, destined to become a park for the city."],
+  ['1970', "Architect Bert Stamps routes eighteen holes along the park's wooded ridges. The course opens as a par 72."],
+  ['1980s', "Disc golfers set the first targets in the upper park, beginning one of the sport's most famous courses."],
+  ['Today', "Retuned to a par 70, still city-owned and still Santa Cruz's home course. Look for the old bear cage near the 8th."],
+];
+---
+<section id="history" class="history">
+  <div class="wrap grid">
+    <div>
+      <span class="kicker">Our story</span>
+      <blockquote>
+        José Vicente de Laveaga hoped his hillside estate would become the Golden Gate Park of Santa Cruz.
+        <cite>The land became DeLaveaga Park, and in 1970, its golf course.</cite>
+      </blockquote>
+    </div>
+    <ol class="timeline">
+      {timeline.map(([yr, text]) => <li><span class="yr">{yr}</span><p>{text}</p></li>)}
+    </ol>
+  </div>
+</section>

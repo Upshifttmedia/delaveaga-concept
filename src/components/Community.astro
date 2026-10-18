@@ -1,0 +1,35 @@
+---
+const clubs = [
+  { when: 'Tuesdays', time: '9:00am', name: "Women's Nifty Niners", text: 'A nine-hole women\'s club that plays both casual and competitive formats.', href: 'mailto:membership.niftyniners@gmail.com', cta: 'Inquire' },
+  { when: 'Thursdays', time: '8:30am', name: "DeLaveaga Women's Golf Club", text: "An eighteen-hole PWGA club with a weekly game that's competitive and friendly.", href: 'mailto:cscurich58@gmail.com', cta: 'Inquire' },
+  { when: 'Monthly', time: 'Year-round', name: 'The Golf Club at DeLaveaga', text: "One of Northern California's largest NCGA clubs. Membership includes a handicap index, monthly tournaments and summer twilight barbecues.", href: 'https://delaveagagc.memberplanet.com/', cta: 'Club website' },
+  { when: 'Each May', time: '', name: 'Santa Cruz City Amateur', text: "The city's championship, played at DeLaveaga every spring.", href: 'https://delaveagagolf.com/events-tournaments', cta: 'Event calendar' },
+];
+const more = [
+  { name: 'RangeSide Bar', text: 'An open-air bar among the trees beside the range, with cornhole, ping-pong and music.', href: 'https://delaveagagolf.com/dining/#rangeside', cta: 'Learn more' },
+  { name: 'Disc golf', text: "DeLaveaga Park's historic disc golf course draws players from around the world.", href: 'https://delaveagagolf.com/disc/', cta: 'Disc golf courses' },
+  { name: 'Tournaments & outings', text: 'Groups of 16 to 144, with a tournament director from first call to final scorecard.', href: 'https://delaveagagolf.com/contact/', cta: 'Plan an outing' },
+  { name: 'Golf shop', text: 'Top brands, DeLa apparel, and staff who play the course every week.', href: 'https://delasantacruz.com/', cta: 'Shop online' },
+];
+const ext = (h: string) => (h.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {});
+---
+<section id="community" class="clubs">
+  <div class="wrap">
+    <span class="kicker">Clubs, events &amp; more</span>
+    <h2 class="h2">Golf is better with regulars.</h2>
+    <div class="list">
+      {clubs.map((c) => (
+        <div class="club">
+          <div class="when">{c.when}{c.time && <small>{c.time}</small>}</div>
+          <div><h3>{c.name}</h3><p>{c.text}</p></div>
+          <a href={c.href} {...ext(c.href)}>{c.cta}</a>
+        </div>
+      ))}
+    </div>
+    <div class="more"><div class="grid">
+      {more.map((m) => (
+        <a href={m.href} {...ext(m.href)}><h3>{m.name}</h3><p>{m.text}</p><span class="go">{m.cta}</span></a>
+      ))}
+    </div></div>
+  </div>
+</section>
